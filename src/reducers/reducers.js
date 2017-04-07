@@ -7,7 +7,7 @@ import {
   RECEIVE_POSTS
 } from '../actions/posts.js'
 
-function selectedCategory (state = 'reactjs', action) {
+function selectedCategory (state = 'blog', action) {
   switch (action.type) {
     case SELECT_CATEGORY:
       return action.category
