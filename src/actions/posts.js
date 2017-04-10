@@ -1,51 +1,83 @@
+// @flow
+
+import type {
+  FetchParams,
+  PostId,
+  State
+} from './../types/types.js'
+
 import fetch from 'isomorphic-fetch'
+
+import { fetchUrlify } from './../api/endpoints.js'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+export const SELECT_POST = 'SELECT_POST'
 export const SELECT_CATEGORY = 'SELECT_CATEGORY'
 
-function requestPosts (category) {
+export function selectPost (id: PostId) {
   return {
-    type: REQUEST_POSTS,
-    category
+    type: SELECT_POST,
+    id
   }
 }
 
-function receivePosts (category, json) {
+function requestPosts (fetchParams: FetchParams) {
+  return {
+    type: REQUEST_POSTS,
+    fetchParams
+  }
+}
+
+const postMap = (post) => ({
+  id: post.id,
+  link: post.link,
+  slug: post.slug,
+  title: post.title.rendered,
+  snippet: post.excerpt ? post.excerpt.rendered : ''
+})
+
+function receivePosts (fetchParams: FetchParams, json) {
   return {
     type: RECEIVE_POSTS,
-    category,
+    fetchParams,
     posts: json
       .filter(post => post.status === 'publish')
-      .map(post => (({ link, title, excerpt }) => ({ link, title: title.rendered, snippet: excerpt.rendered }))(post)),
+      .reduce((accum, post) => {
+        accum[post.id] = postMap(post)
+        return accum
+      }, {}),
     receivedAt: Date.now()
   }
 }
 
-function fetchPosts (category) {
+function fetchPosts (fetchParams: FetchParams) {
   return dispatch => {
-    dispatch(requestPosts(category))
-    return fetch(`http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/posts`)
+    dispatch(requestPosts(fetchParams))
+    return fetch(fetchUrlify(fetchParams))
       .then(response => response.json())
-      .then(json => dispatch(receivePosts(category, json)))
+      .then(json => dispatch(receivePosts(fetchParams, json)))
   }
 }
 
-function shouldFetchPosts (state, category) {
-  const posts = state.postsByCategory[category]
-  if (!posts) {
+function shouldFetchPosts (state: State, fetchParams: FetchParams) {
+  const { items, activeQuery } = state
+  if (!items) {
     return true
-  } else if (posts.isFetching) {
+    // note: order of fetchParams matters for below condition to have any use
+  } else if (JSON.stringify(activeQuery) !== JSON.stringify(fetchParams)) {
+    return true
+  } else if (state.isFetching) {
     return false
   } else {
-    return posts.didInvalidate
+    return state.didInvalidate
   }
 }
 
-export function fetchPostsIfNeeded (category) {
-  return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), category)) {
-      return dispatch(fetchPosts(category))
+export function fetchPostsIfNeeded (fetchParams: FetchParams) {
+  return (dispatch: Function, getState: Function) => {
+    if (shouldFetchPosts(getState(), fetchParams)) {
+      return dispatch(fetchPosts(fetchParams))
     }
   }
 }

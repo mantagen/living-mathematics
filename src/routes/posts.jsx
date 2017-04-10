@@ -1,40 +1,67 @@
+// @flow
+
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectCategory, fetchPostsIfNeeded } from '../actions/posts.js'
+import { fetchPostsIfNeeded } from '../actions/posts.js'
 import PostList from '../components/post-list.js'
 
 class App extends Component {
   constructor (props) {
     super(props)
+    // $FlowFixMe
     this.handleChange = this.handleChange.bind(this)
+    // $FlowFixMe
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
   componentDidMount () {
-    const { dispatch, selectedCategory } = this.props
-    dispatch(fetchPostsIfNeeded(selectedCategory))
+    const { dispatch, selectedCategory, route: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded({
+      postType: postType,
+      query: {
+        category: selectedCategory
+      }
+    }))
   }
 
   componentDidUpdate (prevProps) {
-    if (this.props.selectedCategory !== prevProps.selectedCategory) {
-      const { dispatch, selectedCategory } = this.props
-      dispatch(fetchPostsIfNeeded(selectedCategory))
+    const { dispatch, route: { postType }, selectedCategory } = this.props
+    if (postType !== prevProps.route.postType
+      || selectedCategory !== prevProps.selectedCategory
+    ) {
+      dispatch(fetchPostsIfNeeded({
+        postType: postType,
+        query: {
+          category: selectedCategory
+        }
+      }))
     }
   }
 
   handleChange (nextCategory) {
-    this.props.dispatch(fetchPostsIfNeeded(nextCategory))
+    const { dispatch, route: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded({
+      postType: postType,
+      query: {
+        category: nextCategory
+      }
+    }))
   }
 
   handleRefreshClick (e) {
     e.preventDefault()
 
-    const { dispatch, selectedCategory } = this.props
-    dispatch(fetchPostsIfNeeded(selectedCategory))
+    const { dispatch, route: { postType }, selectedCategory } = this.props
+    dispatch(fetchPostsIfNeeded({
+      postType: postType,
+      query: {
+        category: selectedCategory
+      }
+    }))
   }
 
   selectCategory (category) {
-    selectCategory(category)
+    // selectCategory(category)
   }
 
   render () {
@@ -82,20 +109,22 @@ App.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps (state) {
-  const { selectedCategory, postsByCategory } = state
+function mapStateToProps ({posts}) {
   const {
     isFetching,
     lastUpdated,
-    items: posts
-  } = postsByCategory[selectedCategory] || {
+    items,
+    selectedCategory,
+    postsByCategory
+  } = posts || {
     isFetching: true,
     items: []
   }
+  const blogIds = postsByCategory[selectedCategory]
 
   return {
     selectedCategory,
-    posts,
+    posts: blogIds.map(blogId => items[blogId]).filter(item => !!item),
     isFetching,
     lastUpdated
   }

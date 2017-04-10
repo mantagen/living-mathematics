@@ -1,12 +1,14 @@
+// @flow
+
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 
-import rootReducer from '../reducers/reducers.js'
+import rootReducer from '../reducer.js'
 
 const loggerMiddleware = createLogger()
 
-export default function configureStore (preloadedState) {
+export default function configureStore (preloadedState: Object) {
   return createStore(
     rootReducer,
     preloadedState,
