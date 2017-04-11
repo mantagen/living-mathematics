@@ -87,7 +87,7 @@ export function shouldFetchPosts (state: State, fetchParams: FetchParams) {
 
 export function fetchPostsIfNeeded (fetchParams: FetchParams) {
   return (dispatch: Function, getState: Function) => {
-    if (shouldFetchPosts(getState(), fetchParams)) {
+    if (shouldFetchPosts(getState().posts, fetchParams)) {
       return dispatch(fetchPosts(fetchParams))
     }
   }
