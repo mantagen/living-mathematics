@@ -2,7 +2,7 @@
 
 import type { FetchParams, LocalQuery, WPQuery } from './../types/types.js'
 
-import qs from 'querystring'
+import qs from 'querystring-browser'
 
 export const BASE_URL = 'http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2'
 const queryMapping = {

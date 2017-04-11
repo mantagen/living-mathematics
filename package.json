@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
+    "querystring-browser": "^1.0.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
@@ -57,5 +58,7 @@
       "flowtype"
     ]
   },
-  "pre-commit": ["test"]
+  "pre-commit": [
+    "test"
+  ]
 }
