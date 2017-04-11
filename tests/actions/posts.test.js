@@ -5,8 +5,9 @@ import nock from 'nock'
 import * as actions from './../../src/actions/posts'
 import { fetchUrlify } from './../../src/api/endpoints.js'
 import {
-  generateWPPostObject,
   generateFetchParams,
+  generateWPPostObject,
+  generateState
 } from './../helpers/posts-data.js'
 
 const middlewares = [ thunk ]
@@ -91,5 +92,22 @@ describe('receive posts', () => {
     expect(actualAction.fetchParams).toEqual(expectedAction.fetchParams)
     expect(actualAction).toHaveProperty('receivedAt')
     expect(Number.isInteger(actualAction.receivedAt)).toEqual(true)
+  })
+})
+
+describe('shouldFetchPosts', () => {
+  it('should return true with initialState -> no items', () => {
+    const initialState = generateState()
+    expect(actions.shouldFetchPosts(initialState)).toEqual(true)
+  })
+  it('should return false if already fetching', () => {
+    const item = generateWPPostObject()
+    const state = generateState({ items: { [item.id]: item }, isFetching: true })
+    expect(actions.shouldFetchPosts(state)).toEqual(false)
+  })
+  it('should return true if query as been invalidated', () => {
+    const item = generateWPPostObject()
+    const state = generateState({ items: { [item.id]: item }, didInvalidate: true })
+    expect(actions.shouldFetchPosts(state)).toEqual(true)
   })
 })

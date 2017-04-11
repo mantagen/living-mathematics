@@ -71,9 +71,9 @@ export function fetchPosts (fetchParams: FetchParams) {
   }
 }
 
-function shouldFetchPosts (state: State, fetchParams: FetchParams) {
+export function shouldFetchPosts (state: State, fetchParams: FetchParams) {
   const { items, activeQuery } = state
-  if (!items) {
+  if (!Object.keys(items)[0]) {
     return true
     // note: order of fetchParams matters for below condition to have any use
   } else if (JSON.stringify(activeQuery) !== JSON.stringify(fetchParams)) {

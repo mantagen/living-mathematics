@@ -1,9 +1,18 @@
 // @flow
 import * as types from './../../src/types/types.js'
 
-export const generateFetchParams = (data: Object): types.FetchParams => Object.assign({
-
-}, data)
+const initialState = {
+  activeQuery: undefined,
+  didInvalidate: false,
+  isFetching: false,
+  items: { },
+  postIdsBySlug: { },
+  postsByCategory: { blog: [] },
+  selectedCategory: 'blog',
+  selectedPost: undefined
+}
+export const generateState = (data: Object): types.State => Object.assign({}, initialState, data)
+export const generateFetchParams = (data: Object): types.FetchParams => Object.assign({}, data)
 export const generateWPPostObject = (data: Object): types.WPPost => Object.assign({
   id: 1,
   date: "2017-04-05T14:45:43",

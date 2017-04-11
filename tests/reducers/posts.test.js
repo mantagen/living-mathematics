@@ -2,21 +2,12 @@ import reducer from './../../src/reducers/posts.js'
 import * as actions from './../../src/actions/posts.js'
 
 import {
-  generateWPPostObject,
   generateFetchParams,
+  generateState,
+  generateWPPostObject
 } from './../helpers/posts-data.js'
 
-
-const initialState = {
-  activeQuery: undefined,
-  didInvalidate: false,
-  isFetching: false,
-  items: { },
-  postIdsBySlug: { },
-  postsByCategory: { blog: [] },
-  selectedCategory: 'blog',
-  selectedPost: undefined
-}
+const initialState = generateState()
 
 describe('posts reducer', () => {
   it('should return the initial state', () => {
