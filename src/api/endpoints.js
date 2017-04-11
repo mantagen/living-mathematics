@@ -25,7 +25,7 @@ const keysMap = (mapping: Object) => (query: LocalQuery): WPQuery => {
 export const fetchUrlify = (params: FetchParams) => {
   const { id, postType = 'posts', query = {} } = params
   if (id) {
-    return `${BASE_URL}/${id}`
+    return `${BASE_URL}/${postType}/${id}`
   }
   const queryString = qs.stringify(WPQueryify(query))
   return `${BASE_URL}/${postType}?${queryString}`

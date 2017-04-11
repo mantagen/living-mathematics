@@ -28,6 +28,7 @@ function posts (state: State = initialState, action: Object) {
       })
     case RECEIVE_POSTS:
       return Object.assign({}, state, {
+        activeQuery: action.fetchParams,
         isFetching: false,
         items: action.posts,
         lastUpdated: action.receivedAt,

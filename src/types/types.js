@@ -12,12 +12,28 @@ export type FetchParams = {
   query: LocalQuery
 }
 
-export type Post = {
+export type LocalPost = {
   content: string,
   date: string,
+  id: number,
+  link: string,
   slug: string,
   title: string,
   snippet: string
+}
+
+type Rendered = {
+  rendered: string
+}
+
+export type WPPost = {
+  content: Rendered,
+  date: string,
+  id: number,
+  link: string,
+  slug: string,
+  title: Rendered,
+  excerpt?: Rendered
 }
 
 export type PostsByCategory = {
@@ -28,7 +44,7 @@ export type State = {
   activeQuery?: FetchParams,
   didInvalidate: boolean,
   isFetching: boolean,
-  items: { [id: number]: Post },
+  items: { [id: number]: LocalPost },
   lastUpdated?: Date,
   postIdsBySlug: { [slug: string]: number },
   postsByCategory: PostsByCategory,

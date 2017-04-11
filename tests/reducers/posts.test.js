@@ -1,62 +1,84 @@
-import reducer from '../../reducers/todos'
-import * as types from '../../constants/ActionTypes'
+import reducer from './../../src/reducers/posts.js'
+import * as actions from './../../src/actions/posts.js'
 
-describe('todos reducer', () => {
+import {
+  generateWPPostObject,
+  generateFetchParams,
+} from './../helpers/posts-data.js'
+
+
+const initialState = {
+  activeQuery: undefined,
+  didInvalidate: false,
+  isFetching: false,
+  items: { },
+  postIdsBySlug: { },
+  postsByCategory: { blog: [] },
+  selectedCategory: 'blog',
+  selectedPost: undefined
+}
+
+describe('posts reducer', () => {
   it('should return the initial state', () => {
     expect(
       reducer(undefined, {})
-    ).toEqual([
-      {
-        text: 'Use Redux',
-        completed: false,
-        id: 0
-      }
-    ])
+    ).toEqual(initialState)
   })
 
-  it('should handle ADD_TODO', () => {
+  it('should handle SELECT_POST', () => {
+    const id = 1
     expect(
-      reducer([], {
-        type: types.ADD_TODO,
-        text: 'Run the tests'
+      reducer(initialState, {
+        type: actions.SELECT_POST,
+        id: id
       })
-    ).toEqual(
-      [
-        {
-          text: 'Run the tests',
-          completed: false,
-          id: 0
-        }
-      ]
-    )
+    ).toEqual(Object.assign({}, initialState, { selectedPost: id }))
+  })
 
+  it('should handle SELECT_CATEGORY', () => {
+    const category = 'archive'
     expect(
-      reducer(
-        [
-          {
-            text: 'Use Redux',
-            completed: false,
-            id: 0
-          }
-        ],
-        {
-          type: types.ADD_TODO,
-          text: 'Run the tests'
-        }
-      )
-    ).toEqual(
-      [
-        {
-          text: 'Run the tests',
-          completed: false,
-          id: 1
+      reducer(initialState, {
+        type: actions.SELECT_CATEGORY,
+        category: category
+      })
+    ).toEqual(Object.assign({}, initialState, { selectedCategory: category }))
+  })
+
+  it('should handle REQUEST_POSTS', () => {
+    const fetchParams = generateFetchParams()
+    expect(
+      reducer(initialState, {
+        type: actions.REQUEST_POSTS,
+        fetchParams: fetchParams
+      })
+    ).toEqual(Object.assign({}, initialState, { isFetching: true }))
+  })
+
+  it('should handle RECEIVE_POSTS', () => {
+    const fetchParams = generateFetchParams({ query: { category: 'blog' }})
+    const samplePost = generateWPPostObject()
+    const state = Object.assign({}, initialState, { isFetching: true })
+    const thisDate = Date.now()
+    expect(
+      reducer(state, {
+        type: actions.RECEIVE_POSTS,
+        fetchParams: fetchParams,
+        posts: {
+          [samplePost.id]: samplePost
         },
-        {
-          text: 'Use Redux',
-          completed: false,
-          id: 0
-        }
-      ]
-    )
+        receivedAt: thisDate
+      })
+    ).toEqual(Object.assign({}, state, {
+      isFetching: false,
+      items: {
+        [samplePost.id]: samplePost
+      },
+      activeQuery: fetchParams,
+      lastUpdated: thisDate,
+      postsByCategory: {
+        'blog': [samplePost.id.toString()]
+      }
+    }))
   })
 })

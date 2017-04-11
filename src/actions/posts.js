@@ -2,6 +2,8 @@
 
 import type {
   FetchParams,
+  WPPost,
+  LocalPost,
   PostId,
   State
 } from './../types/types.js'
@@ -15,6 +17,13 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_POST = 'SELECT_POST'
 export const SELECT_CATEGORY = 'SELECT_CATEGORY'
 
+export function selectCategory (category: String) {
+  return {
+    type: SELECT_CATEGORY,
+    category
+  }
+}
+
 export function selectPost (id: PostId) {
   return {
     type: SELECT_POST,
@@ -22,22 +31,24 @@ export function selectPost (id: PostId) {
   }
 }
 
-function requestPosts (fetchParams: FetchParams) {
+export function requestPosts (fetchParams: FetchParams) {
   return {
     type: REQUEST_POSTS,
     fetchParams
   }
 }
 
-const postMap = (post) => ({
+export const postMap = (post: WPPost): LocalPost => ({
+  content: post.content ? post.content.rendered : '',
   id: post.id,
+  date: post.date,
   link: post.link,
   slug: post.slug,
   title: post.title.rendered,
   snippet: post.excerpt ? post.excerpt.rendered : ''
 })
 
-function receivePosts (fetchParams: FetchParams, json) {
+export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
   return {
     type: RECEIVE_POSTS,
     fetchParams,
@@ -51,8 +62,8 @@ function receivePosts (fetchParams: FetchParams, json) {
   }
 }
 
-function fetchPosts (fetchParams: FetchParams) {
-  return dispatch => {
+export function fetchPosts (fetchParams: FetchParams) {
+  return (dispatch: Function) => {
     dispatch(requestPosts(fetchParams))
     return fetch(fetchUrlify(fetchParams))
       .then(response => response.json())
