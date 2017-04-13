@@ -5,70 +5,38 @@ import { connect } from 'react-redux'
 import { fetchPostsIfNeeded } from '../actions/posts.js'
 import PostList from '../components/post-list.js'
 
-class App extends Component {
+class Posts extends Component {
   constructor (props) {
     super(props)
-    // $FlowFixMe
-    this.handleChange = this.handleChange.bind(this)
     // $FlowFixMe
     this.handleRefreshClick = this.handleRefreshClick.bind(this)
   }
 
   componentDidMount () {
-    const { dispatch, selectedCategory, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded({
-      postType: postType,
-      query: {
-        category: selectedCategory
-      }
-    }))
+    const { activeQuery, dispatch, route: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
   }
 
   componentDidUpdate (prevProps) {
-    const { dispatch, route: { postType }, selectedCategory } = this.props
-    if (postType !== prevProps.route.postType
-      || selectedCategory !== prevProps.selectedCategory
-    ) {
-      dispatch(fetchPostsIfNeeded({
-        postType: postType,
-        query: {
-          category: selectedCategory
-        }
-      }))
+    const { activeQuery, dispatch, route: { postType } } = this.props
+    if (postType !== prevProps.route.postType) {
+      dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
     }
-  }
-
-  handleChange (nextCategory) {
-    const { dispatch, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded({
-      postType: postType,
-      query: {
-        category: nextCategory
-      }
-    }))
   }
 
   handleRefreshClick (e) {
     e.preventDefault()
 
-    const { dispatch, route: { postType }, selectedCategory } = this.props
-    dispatch(fetchPostsIfNeeded({
-      postType: postType,
-      query: {
-        category: selectedCategory
-      }
-    }))
-  }
-
-  selectCategory (category) {
-    // selectCategory(category)
+    const { activeQuery, dispatch, route: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
   }
 
   render () {
-    const { selectedCategory, posts, isFetching, lastUpdated } = this.props
+    const { activeQuery, posts, isFetching, lastUpdated } = this.props
+
     return (
       <div>
-        { selectedCategory }
+        { JSON.stringify(activeQuery) }
         <p>
           {lastUpdated &&
             <span>
@@ -99,8 +67,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  selectedCategory: PropTypes.string.isRequired,
+Posts.propTypes = {
   posts: PropTypes.arrayOf(
     PropTypes.object.isRequired,
   ).isRequired,
@@ -111,23 +78,24 @@ App.propTypes = {
 
 function mapStateToProps ({posts}) {
   const {
+    activeQuery,
     isFetching,
     lastUpdated,
     items,
-    selectedCategory,
-    postsByCategory
+    itemOrder
   } = posts || {
     isFetching: true,
-    items: []
+    items: {},
+    itemOrder: [],
   }
-  const blogIds = postsByCategory[selectedCategory]
+  const postIds = itemOrder
 
   return {
-    selectedCategory,
-    posts: blogIds.map(blogId => items[blogId]).filter(item => !!item),
+    activeQuery,
+    posts: postIds.map(id => items[id]).filter(item => !!item),
     isFetching,
     lastUpdated
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(Posts)

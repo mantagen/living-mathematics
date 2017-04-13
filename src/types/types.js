@@ -1,5 +1,7 @@
 // @flow
 
+export type LocalPostId = string
+
 export type LocalQuery = {
   category?: string,
   searchTerm?: string,
@@ -15,7 +17,7 @@ export type FetchParams = {
 export type LocalPost = {
   content: string,
   date: string,
-  id: number,
+  id: LocalPostId,
   link: string,
   slug: string,
   title: string,
@@ -29,32 +31,27 @@ type Rendered = {
 export type WPPost = {
   content: Rendered,
   date: string,
-  id: number,
+  id: LocalPostId,
   link: string,
   slug: string,
   title: Rendered,
   excerpt?: Rendered
 }
 
-export type PostsByCategory = {
-  [category: string]: Array<number>
-}
-
-export type State = {
+export type PostState = {
   activeQuery?: FetchParams,
   didInvalidate: boolean,
   isFetching: boolean,
-  items: { [id: number]: LocalPost },
+  items: { [id: LocalPostId]: LocalPost },
+  itemOrder: Array<LocalPostId>,
   lastUpdated?: Date,
-  postIdsBySlug: { [slug: string]: number },
-  postsByCategory: PostsByCategory,
-  selectedCategory: string,
   selectedPost?: number,
 }
 
-export type Category = string
-
-export type PostId = Number
+export type NavState = {
+  items: Array<Object>,
+  isFetching: boolean,
+}
 
 export type WPQuery = {
   'filter[name]'?: string,

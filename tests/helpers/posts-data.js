@@ -6,12 +6,11 @@ const initialState = {
   didInvalidate: false,
   isFetching: false,
   items: { },
-  postIdsBySlug: { },
-  postsByCategory: { blog: [] },
-  selectedCategory: 'blog',
+  itemOrder: [],
+  lastUpdated: undefined,
   selectedPost: undefined
 }
-export const generateState = (data: Object): types.State => Object.assign({}, initialState, data)
+export const generateState = (data: Object): types.PostState => Object.assign({}, initialState, data)
 export const generateFetchParams = (data: Object): types.FetchParams => Object.assign({}, data)
 export const generateWPPostObject = (data: Object): types.WPPost => Object.assign({
   id: 1,

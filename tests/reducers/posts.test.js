@@ -26,16 +26,6 @@ describe('posts reducer', () => {
     ).toEqual(Object.assign({}, initialState, { selectedPost: id }))
   })
 
-  it('should handle SELECT_CATEGORY', () => {
-    const category = 'archive'
-    expect(
-      reducer(initialState, {
-        type: actions.SELECT_CATEGORY,
-        category: category
-      })
-    ).toEqual(Object.assign({}, initialState, { selectedCategory: category }))
-  })
-
   it('should handle REQUEST_POSTS', () => {
     const fetchParams = generateFetchParams()
     expect(
@@ -55,21 +45,20 @@ describe('posts reducer', () => {
       reducer(state, {
         type: actions.RECEIVE_POSTS,
         fetchParams: fetchParams,
+        order: [samplePost.id.toString()],
         posts: {
-          [samplePost.id]: samplePost
+          [samplePost.id.toString()]: samplePost
         },
         receivedAt: thisDate
       })
     ).toEqual(Object.assign({}, state, {
+      activeQuery: fetchParams,
       isFetching: false,
       items: {
-        [samplePost.id]: samplePost
+        [samplePost.id.toString()]: samplePost
       },
-      activeQuery: fetchParams,
-      lastUpdated: thisDate,
-      postsByCategory: {
-        'blog': [samplePost.id.toString()]
-      }
+      itemOrder: [samplePost.id.toString()],
+      lastUpdated: thisDate
     }))
   })
 })

@@ -1,17 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router'
 
+import Nav from './containers/nav.jsx'
+
 class App extends React.Component {
   render() {
     return (
       <div>
         <header>
-          <nav>
-            <Link to='/about' >About</Link>
-            <Link to='/contact' >Contact</Link>
-            <Link to='/blog' >Blog</Link>
-            <Link to='/archive' >Archive</Link>
-          </nav>
+          <Nav />
         </header>
         { this.props.children }
       </div>

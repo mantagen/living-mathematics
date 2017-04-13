@@ -17,5 +17,5 @@ module.exports = {
       loader: 'babel-loader'
     }]
   },
-  devtool: 'eval-source-map'
+  devtool: 'source-map'
 };
