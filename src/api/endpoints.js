@@ -22,6 +22,10 @@ const keysMap = (mapping: Object) => (query: LocalQuery): WPQuery => {
   }, {})
 }
 
+// for now menu id to be input manually to save second request being made
+const menuId = 5
+export const menuUrl = `http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp-api-menus/v2/menus/${menuId}`
+
 export const fetchUrlify = (params: FetchParams) => {
   const { id, postType = 'posts', query = {} } = params
   if (id) {

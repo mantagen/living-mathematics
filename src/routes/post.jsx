@@ -1,7 +1,7 @@
 // @flow
 
 import type {
-  State
+  PostState
 } from './../types/types.js'
 
 import React, { Component, PropTypes } from 'react'
@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 
 import { selectPost } from '../actions/posts.js'
 
-class App extends Component {
+class Post extends Component {
   constructor (props) {
     super(props)
   }
@@ -58,7 +58,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+Post.propTypes = {
   post: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
@@ -76,4 +76,4 @@ function mapStateToProps ({posts}) {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(Post)

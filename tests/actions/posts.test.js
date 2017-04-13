@@ -19,7 +19,7 @@ describe('async actions', () => {
   })
 
   it('creates RECEIVE_POSTS when fetching pasts has been done', () => {
-    const id = 1
+    const id = "1"
     const fetchParams = generateFetchParams({ id })
     const postResponse = generateWPPostObject()
     nock(fetchUrlify(fetchParams))
@@ -32,7 +32,9 @@ describe('async actions', () => {
         fetchParams },
       { type: actions.RECEIVE_POSTS,
         fetchParams,
-        posts: { [id]: transformedPost } }
+        posts: { [id]: transformedPost },
+        order: [id]
+      }
     ]
     const store = mockStore({ todos: [] })
 
@@ -52,17 +54,6 @@ describe('select a post', () => {
       id
     }
     expect(actions.selectPost(id)).toEqual(expectedAction)
-  })
-})
-
-describe('select a category', () => {
-  it('should create an action to select a category', () => {
-    const category = 'blog'
-    const expectedAction = {
-      type: actions.SELECT_CATEGORY,
-      category
-    }
-    expect(actions.selectCategory(category)).toEqual(expectedAction)
   })
 })
 

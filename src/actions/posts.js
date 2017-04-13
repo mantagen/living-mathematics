@@ -4,8 +4,8 @@ import type {
   FetchParams,
   WPPost,
   LocalPost,
-  PostId,
-  State
+  LocalPostId,
+  PostState
 } from './../types/types.js'
 
 import fetch from 'isomorphic-fetch'
@@ -15,16 +15,8 @@ import { fetchUrlify } from './../api/endpoints.js'
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_POST = 'SELECT_POST'
-export const SELECT_CATEGORY = 'SELECT_CATEGORY'
 
-export function selectCategory (category: String) {
-  return {
-    type: SELECT_CATEGORY,
-    category
-  }
-}
-
-export function selectPost (id: PostId) {
+export function selectPost (id: LocalPostId) {
   return {
     type: SELECT_POST,
     id
@@ -55,9 +47,10 @@ export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
     posts: json
       .filter(post => post.status === 'publish')
       .reduce((accum, post) => {
-        accum[post.id] = postMap(post)
+        accum[post.id.toString()] = postMap(post)
         return accum
       }, {}),
+    order: json.map(post => post.id.toString()),
     receivedAt: Date.now()
   }
 }
@@ -71,7 +64,7 @@ export function fetchPosts (fetchParams: FetchParams) {
   }
 }
 
-export function shouldFetchPosts (state: State, fetchParams: FetchParams) {
+export function shouldFetchPosts (state: PostState, fetchParams: FetchParams) {
   const { items, activeQuery } = state
   if (!Object.keys(items)[0]) {
     return true

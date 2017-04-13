@@ -1,26 +1,24 @@
 // @flow
 
-import type { State } from './../types/types.js'
+import type { PostState } from './../types/types.js'
 
-const initialState: State = {
+const initialState: PostState = {
   activeQuery: undefined,
   didInvalidate: false,
   isFetching: false,
   items: { },
-  postIdsBySlug: { },
-  postsByCategory: { blog: [] },
-  selectedCategory: 'blog',
+  itemOrder: [],
+  lastUpdated: undefined,
   selectedPost: undefined
 }
 
 import {
   REQUEST_POSTS,
   RECEIVE_POSTS,
-  SELECT_POST,
-  SELECT_CATEGORY
+  SELECT_POST
 } from '../actions/posts.js'
 
-function posts (state: State = initialState, action: Object) {
+function posts (state: PostState = initialState, action: Object) {
   switch (action.type) {
     case REQUEST_POSTS:
       return Object.assign({}, state, {
@@ -31,18 +29,12 @@ function posts (state: State = initialState, action: Object) {
         activeQuery: action.fetchParams,
         isFetching: false,
         items: action.posts,
-        lastUpdated: action.receivedAt,
-        postsByCategory: Object.assign({}, state.postsByCategory, {
-          [action.fetchParams.query.category]: Object.keys(action.posts)
-        })
+        itemOrder: action.order,
+        lastUpdated: action.receivedAt
       })
     case SELECT_POST:
       return Object.assign({}, state, {
         selectedPost: action.id
-      })
-    case SELECT_CATEGORY:
-      return Object.assign({}, state, {
-        selectedCategory: action.category
       })
     default:
       return state
