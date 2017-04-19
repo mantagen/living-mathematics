@@ -1,13 +1,14 @@
 // @flow
 
 import type {
+  FetchParams,
   PostState
 } from './../types/types.js'
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { selectPost } from '../actions/posts.js'
+import { fetchPostsIfNeeded, selectPost } from '../actions/posts.js'
 
 class Post extends Component {
   constructor (props) {
@@ -15,15 +16,16 @@ class Post extends Component {
   }
 
   componentDidMount () {
-    const { dispatch, identifier, params: { id } } = this.props
-    dispatch(selectPost(id))
+    const { dispatch, identifier, route: { slug } } = this.props
+    const params = { query: { slug }}
+    dispatch(fetchPostsIfNeeded(params))
   }
 
   componentDidUpdate (prevProps) {
-    const { params: { id: prevID } } = prevProps
-    const { dispatch, params: { id: newID } } = this.props
-    const shouldFetch = newID !== prevID
-    shouldFetch && dispatch(selectPost(newID))
+    const { route: { slug: prevSlug } } = prevProps
+    const { dispatch, route: { slug: newSlug } } = this.props
+    const shouldFetch = newSlug !== prevSlug
+    shouldFetch && dispatch(fetchPostsIfNeeded({ query: { slug: newSlug }}))
   }
 
   render () {

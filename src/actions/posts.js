@@ -30,10 +30,27 @@ export function requestPosts (fetchParams: FetchParams) {
   }
 }
 
+export const fileMap = (acf: any): any => {
+  if (!acf) {
+    return undefined
+  } else if (!acf.file) {
+    return undefined
+  } else {
+    const fnArr = acf.file.filename.split('.')
+    return {
+      id: acf.file.id,
+      url: acf.file.url,
+      ext: fnArr[fnArr.length - 1],
+      description: acf.description
+    }
+  }
+}
+
 export const postMap = (post: WPPost): LocalPost => ({
   content: post.content ? post.content.rendered : '',
   id: post.id,
   date: post.date,
+  file: fileMap(post.acf),
   link: post.link,
   slug: post.slug,
   title: post.title.rendered,
@@ -61,6 +78,11 @@ export function fetchPosts (fetchParams: FetchParams) {
     return fetch(fetchUrlify(fetchParams))
       .then(response => response.json())
       .then(json => dispatch(receivePosts(fetchParams, json)))
+      .then(state => {
+        if (Object.keys(state.posts).length === 1) {
+          dispatch(selectPost(Object.keys(state.posts)[0]))
+        }
+      })
   }
 }
 

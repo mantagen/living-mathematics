@@ -13,22 +13,22 @@ class Posts extends Component {
   }
 
   componentDidMount () {
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
+    const { activeQuery, dispatch, params: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType, query: {} })))
   }
 
   componentDidUpdate (prevProps) {
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    if (postType !== prevProps.route.postType) {
-      dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
+    const { activeQuery, dispatch, params: { postType } } = this.props
+    if (postType !== prevProps.params.postType) {
+      dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType, query: {} })))
     }
   }
 
   handleRefreshClick (e) {
     e.preventDefault()
 
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
+    const { activeQuery, dispatch, params: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType, query: {} })))
   }
 
   render () {
@@ -36,7 +36,6 @@ class Posts extends Component {
 
     return (
       <div>
-        { JSON.stringify(activeQuery) }
         <p>
           {lastUpdated &&
             <span>
@@ -46,7 +45,8 @@ class Posts extends Component {
           }
           {!isFetching &&
             <a href='#'
-              onClick={this.handleRefreshClick}>
+              onClick={this.handleRefreshClick}
+            >
               Refresh
             </a>
           }
@@ -88,7 +88,7 @@ function mapStateToProps ({posts}) {
     items: {},
     itemOrder: [],
   }
-  const postIds = itemOrder
+  const postIds = itemOrder || []
 
   return {
     activeQuery,

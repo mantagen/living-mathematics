@@ -7,6 +7,7 @@ import { fetchUrlify } from './../../src/api/endpoints.js'
 import {
   generateFetchParams,
   generateWPPostObject,
+  generateWPResponse,
   generateState
 } from './../helpers/posts-data.js'
 
@@ -18,32 +19,68 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
-  it('creates RECEIVE_POSTS when fetching pasts has been done', () => {
-    const id = "1"
-    const fetchParams = generateFetchParams({ id })
-    const postResponse = generateWPPostObject()
-    nock(fetchUrlify(fetchParams))
-      .get('')
-      .reply(200, [postResponse])
+    it('creates RECEIVE_POSTS when fetching posts has been done\n.'
+      + 'if many items are returned, it does not create SELECT_POST', () => {
+      const id = "1"
+      // const fetchParams = generateFetchParams({ query: { searchTerm: 'test'}})
+      const fetchParams = generateFetchParams({ id })
+      const postResponse = generateWPResponse(5)
+      nock(fetchUrlify(fetchParams))
+        .get('')
+        .reply(200, postResponse)
 
-    const transformedPost = actions.postMap(postResponse)
-    const expectedActions = [
-      { type: actions.REQUEST_POSTS,
-        fetchParams },
-      { type: actions.RECEIVE_POSTS,
+      const transformedPosts = postResponse.map(actions.postMap)
+      const expectedActions = [{
+        type: actions.REQUEST_POSTS,
+        fetchParams
+      }, {
+        type: actions.RECEIVE_POSTS,
+        fetchParams,
+        posts: transformedPosts.reduce((accum, post) => {
+          accum[post.id.toString()] = post
+          return accum
+        }, {}),
+        order: transformedPosts.map(post => post.id.toString())
+      }]
+      const store = mockStore({ todos: [] })
+
+      return store.dispatch(actions.fetchPosts(fetchParams))
+        .then(() => { // return of async actions
+          expectedActions[1].receivedAt = store.getActions()[1].receivedAt
+          expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
+
+    it('creates RECEIVE_POSTS when fetching posts has been done\n.'
+      + 'if only one item is returned, it also creates SELECT_POST', () => {
+      const id = "1"
+      const fetchParams = generateFetchParams({ id })
+      const postResponse = generateWPPostObject()
+      nock(fetchUrlify(fetchParams))
+        .get('')
+        .reply(200, [postResponse])
+
+      const transformedPost = actions.postMap(postResponse)
+      const expectedActions = [{
+        type: actions.REQUEST_POSTS,
+        fetchParams
+      }, {
+        type: actions.RECEIVE_POSTS,
         fetchParams,
         posts: { [id]: transformedPost },
         order: [id]
-      }
-    ]
-    const store = mockStore({ todos: [] })
+      }, {
+        type: actions.SELECT_POST,
+        id
+      }]
+      const store = mockStore({ todos: [] })
 
-    return store.dispatch(actions.fetchPosts(fetchParams))
-      .then(() => { // return of async actions
-        expectedActions[1].receivedAt = store.getActions()[1].receivedAt
-        expect(store.getActions()).toEqual(expectedActions)
-      })
-  })
+      return store.dispatch(actions.fetchPosts(fetchParams))
+        .then(() => { // return of async actions
+          expectedActions[1].receivedAt = store.getActions()[1].receivedAt
+          expect(store.getActions()).toEqual(expectedActions)
+        })
+    })
 })
 
 describe('select a post', () => {

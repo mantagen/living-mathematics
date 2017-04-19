@@ -14,10 +14,20 @@ export type FetchParams = {
   query: LocalQuery
 }
 
+export type File = {
+  id: string,
+  url: string,
+}
+
+export type Acf = {
+  file?: File
+}
+
 export type LocalPost = {
   content: string,
   date: string,
   id: LocalPostId,
+  file?: File,
   link: string,
   slug: string,
   title: string,
@@ -29,6 +39,7 @@ type Rendered = {
 }
 
 export type WPPost = {
+  acf?: Object,
   content: Rendered,
   date: string,
   id: LocalPostId,

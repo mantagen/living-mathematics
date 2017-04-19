@@ -17,5 +17,8 @@ module.exports = {
       loader: 'babel-loader'
     }]
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  devServer: {
+    historyApiFallback: true
+  }
 };

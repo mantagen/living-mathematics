@@ -1,0 +1,160 @@
+@font-face {
+  font-family: 'Helvetica';
+  src: url('fonts/HelveticaNeueLTStd-LtCn.otf'); /* IE9 Compat Modes */
+}
+
+html {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica', Arial, sans-serif;
+  color: #333;
+}
+p {
+  font-size: 23px;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+h1 {
+  font-size: 2em;
+}
+h2 {
+  font-size: 27px;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+li {
+  margin: 0;
+  padding: 0;
+}
+label {
+  font-size: 23px;
+}
+img {
+  max-width: 100%;
+}
+.logo {
+  position: fixed;
+  width: 700px;
+  float: right;
+  margin-left: 87px;
+  top: 445px;
+  -webkit-transition: top ease 0.9s;
+  transition: top ease 0.9s;
+}
+.logo img {
+  width: 76px;
+  float: right;
+}
+.logo.isFetching {
+  top: 500px;
+}
+.site-container {
+  margin: 45px;
+}
+.site-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  margin-bottom: 27px;
+}
+.nav__link {
+  font-size: 27px;
+  line-height: 57px;
+  padding: 15px 0;
+}
+.nav__link--active {
+  color: #3385d6;
+}
+.main-wrapper {
+  margin-top: 2em;
+}
+input {
+  height: 32px;
+}
+input, textarea {
+  color: #3385d6;
+  font-family: 'Helvetica', Arial, sans-serif;
+  font-size: 23px;
+  width: 220px;
+  padding-left: 0;
+  border: none;
+  border-bottom: 1px solid #333;
+  outline: none;
+}
+.contact-form {
+  position: relative;
+}
+.contact-form label{
+  position: absolute;
+  height: 35px;
+  line-height: 34px;
+  background-color: white;
+  width: 100%;
+  cursor: pointer;
+}
+.contact-form .form-group {
+  margin: 5px 0;
+}
+.contact-form .form-group.active label {
+  display: none;
+}
+.contact-form textarea {
+  overflow: hidden;
+  padding-top: 3px;
+}
+.send-button {
+  color: #333;
+  font-family: 'Helvetica', Arial, sans-serif;
+  width: 95px;
+  font-size: 23px;
+  height: 37px;
+  padding: 8px;
+  cursor: pointer;
+  border: 1px solid #333;
+  outline: none;
+  background-color: white;
+}
+.send-button:focus .send-icon {
+  color: #3385d6
+}
+.send-button:disabled {
+  border-color: #a9a9a9;
+  color: #a9a9a9;
+}
+.send-button:active {
+  color: #3385d6
+}
+.article-listItem__title {
+  margin-bottom: 0;
+}
+.article-listItem__snippet {
+  margin-top: 0;
+}
+.article-listItem__filetype {
+  font-size: 23px;
+  color: #3385d6;
+}
+.send-icon {
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: -5px;
+}
