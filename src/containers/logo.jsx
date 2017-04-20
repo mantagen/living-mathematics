@@ -3,15 +3,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { Link } from 'react-router'
-
 import classNames from 'classnames'
 
 class Logo extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     const { isFetching } = this.props
     const logoClass = classNames('logo', {
@@ -19,12 +13,15 @@ class Logo extends Component {
     })
 
     return (
-      <div className={ logoClass }>
+      <div className={logoClass}>
         <img src='assets/img/mirror-trefoil.jpg' />
       </div>
     )
   }
 }
 
+Logo.propTypes = {
+  isFetching: PropTypes.bool.isRequired
+}
 
 export default connect(({ posts: { isFetching } }) => ({ isFetching }))(Logo)

@@ -8,10 +8,6 @@ import { Link } from 'react-router'
 import { fetchNavIfNeeded } from './../actions/nav-actions.js'
 
 class Nav extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   componentDidMount () {
     const { dispatch } = this.props
     dispatch(fetchNavIfNeeded())
@@ -29,10 +25,15 @@ class Nav extends Component {
   }
 }
 
+Nav.propTypes = {
+  navItems: PropTypes.array.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
+
 const navItem = ({ link, title }, index) => (
-  <li className='nav__item' key={ `nav__item--${index}` }>
+  <li className='nav__item' key={`nav__item--${index}`}>
     <Link
-      to={ link }
+      to={link}
       className='nav__link'
       activeClassName='nav__link--active'
     >{ title }</Link>
@@ -45,7 +46,7 @@ function mapStateToProps ({nav}) {
     items
   } = nav || {
     isFetching: true,
-    items: [],
+    items: []
   }
 
   return {

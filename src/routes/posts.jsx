@@ -32,7 +32,7 @@ class Posts extends Component {
   }
 
   render () {
-    const { activeQuery, posts, isFetching, lastUpdated } = this.props
+    const { posts, isFetching, lastUpdated } = this.props
 
     return (
       <div>
@@ -86,7 +86,7 @@ function mapStateToProps ({posts}) {
   } = posts || {
     isFetching: true,
     items: {},
-    itemOrder: [],
+    itemOrder: []
   }
   const postIds = itemOrder || []
 
