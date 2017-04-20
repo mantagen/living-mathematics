@@ -1,23 +1,14 @@
 // @flow
 
-import type {
-  FetchParams,
-  PostState
-} from './../types/types.js'
-
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPostsIfNeeded, selectPost } from '../actions/posts.js'
+import { fetchPostsIfNeeded } from '../actions/posts.js'
 
-class Post extends Component {
-  constructor (props) {
-    super(props)
-  }
-
+class Page extends Component {
   componentDidMount () {
-    const { dispatch, identifier, route: { slug } } = this.props
-    const params = { query: { slug }}
+    const { dispatch, route: { slug } } = this.props
+    const params = { query: { slug } }
     dispatch(fetchPostsIfNeeded(params))
   }
 
@@ -25,7 +16,7 @@ class Post extends Component {
     const { route: { slug: prevSlug } } = prevProps
     const { dispatch, route: { slug: newSlug } } = this.props
     const shouldFetch = newSlug !== prevSlug
-    shouldFetch && dispatch(fetchPostsIfNeeded({ query: { slug: newSlug }}))
+    shouldFetch && dispatch(fetchPostsIfNeeded({ query: { slug: newSlug } }))
   }
 
   render () {
@@ -60,7 +51,7 @@ class Post extends Component {
   }
 }
 
-Post.propTypes = {
+Page.propTypes = {
   post: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
@@ -78,4 +69,4 @@ function mapStateToProps ({posts}) {
   }
 }
 
-export default connect(mapStateToProps)(Post)
+export default connect(mapStateToProps)(Page)
