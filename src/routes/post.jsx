@@ -1,21 +1,13 @@
 // @flow
 
-import type {
-  PostState
-} from './../types/types.js'
-
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
 import { selectPost } from '../actions/posts.js'
 
 class Post extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   componentDidMount () {
-    const { dispatch, identifier, params: { id } } = this.props
+    const { dispatch, params: { id } } = this.props
     dispatch(selectPost(id))
   }
 

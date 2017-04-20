@@ -88,7 +88,7 @@ img {
   margin-top: 2em;
 }
 input {
-  height: 32px;
+  height: 27px;
 }
 input, textarea {
   color: #3385d6;
@@ -100,24 +100,24 @@ input, textarea {
   border-bottom: 1px solid #333;
   outline: none;
 }
-.contact-form {
+.form__contact {
   position: relative;
 }
-.contact-form label{
+.form__contact label{
   position: absolute;
-  height: 35px;
-  line-height: 34px;
+  height: 27px;
+  /*line-height: 34px;*/
   background-color: white;
   width: 100%;
   cursor: pointer;
 }
-.contact-form .form-group {
+.form__contact .form-group {
   margin: 5px 0;
 }
-.contact-form .form-group.active label {
+.form__contact .form-group.active label {
   display: none;
 }
-.contact-form textarea {
+.form__contact textarea {
   overflow: hidden;
   padding-top: 3px;
 }
