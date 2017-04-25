@@ -4,7 +4,6 @@ import type {
   FetchParams,
   WPPost,
   LocalPost,
-  LocalPostId,
   PostState
 } from './../types/types.js'
 
@@ -15,20 +14,6 @@ import { fetchUrlify } from './../api/endpoints.js'
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_POST = 'SELECT_POST'
-
-export function selectPost (id: LocalPostId) {
-  return {
-    type: SELECT_POST,
-    id
-  }
-}
-
-export function requestPosts (fetchParams: FetchParams) {
-  return {
-    type: REQUEST_POSTS,
-    fetchParams
-  }
-}
 
 export const fileMap = (acf: any): any => {
   if (!acf) {
@@ -53,9 +38,26 @@ export const postMap = (post: WPPost): LocalPost => ({
   file: fileMap(post.acf),
   link: post.link,
   slug: post.slug,
+  snippet: post.excerpt ? post.excerpt.rendered : '',
   title: post.title.rendered,
-  snippet: post.excerpt ? post.excerpt.rendered : ''
+  type: post.type
 })
+
+export function selectPost (identifier: Object) {
+  const { postType, slug } = identifier
+  return {
+    type: SELECT_POST,
+    postType,
+    slug
+  }
+}
+
+export function requestPosts (fetchParams: FetchParams) {
+  return {
+    type: REQUEST_POSTS,
+    fetchParams
+  }
+}
 
 export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
   return {
@@ -64,10 +66,9 @@ export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
     posts: json
       .filter(post => post.status === 'publish')
       .reduce((accum, post) => {
-        accum[post.id.toString()] = postMap(post)
+        accum[post.slug] = postMap(post)
         return accum
       }, {}),
-    order: json.map(post => post.id.toString()),
     receivedAt: Date.now()
   }
 }
@@ -78,18 +79,18 @@ export function fetchPosts (fetchParams: FetchParams) {
     return fetch(fetchUrlify(fetchParams))
       .then(response => response.json())
       .then(json => dispatch(receivePosts(fetchParams, json)))
-      .then(state => {
-        if (Object.keys(state.posts).length === 1) {
-          dispatch(selectPost(Object.keys(state.posts)[0]))
-        }
-      })
   }
 }
 
 export function shouldFetchPosts (state: PostState, fetchParams: FetchParams) {
-  const { items, activeQuery } = state
-  if (!Object.keys(items)[0]) {
+  const { postType, query: { slug } } = fetchParams
+  const { postsByType: { [postType]: items }, activeQuery } = state
+  if (!items) {
     return true
+  } else if (!Object.keys(items)[0]) {
+    return true
+  } else if (items.hasOwnProperty(slug)) {
+    return false
     // note: order of fetchParams matters for below condition to have any use
   } else if (JSON.stringify(activeQuery) !== JSON.stringify(fetchParams)) {
     return true

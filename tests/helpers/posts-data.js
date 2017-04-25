@@ -1,19 +1,25 @@
 // @flow
+
 import * as types from './../../src/types/types.js'
 
 const initialState = {
   activeQuery: undefined,
   didInvalidate: false,
   isFetching: false,
-  items: { },
-  itemOrder: [],
+  postsByType: {
+    pages: {},
+    posts: {}
+  },
   lastUpdated: undefined,
-  selectedPost: undefined
+  selectedPost: {
+    postType: 'pages',
+    slug: 'home'
+  }
 }
 export const generateState = (data: Object): types.PostState =>
   Object.assign({}, initialState, data)
 export const generateFetchParams = (data: Object): types.FetchParams =>
-  Object.assign({}, data)
+  Object.assign({ postType: 'posts', query: {} }, data)
 export const generateWPResponse = (num: number): Array<types.WPPost> =>
   Array.apply(null, Array(5)).map((elem, i) => generateWPPostObject({ id: i }))
 export const generateWPPostObject = (data: Object): types.WPPost =>

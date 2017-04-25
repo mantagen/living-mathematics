@@ -3,19 +3,22 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { selectPost } from '../actions/posts.js'
+import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions.js'
 
 class Post extends Component {
   componentDidMount () {
-    const { dispatch, params: { id } } = this.props
-    dispatch(selectPost(id))
+    const { dispatch, params: { postType, slug } } = this.props
+    const params = { postType, query: { slug } }
+    dispatch(selectPost({ postType, slug }))
+    dispatch(fetchPostsIfNeeded(params))
   }
 
   componentDidUpdate (prevProps) {
-    const { params: { id: prevID } } = prevProps
-    const { dispatch, params: { id: newID } } = this.props
-    const shouldFetch = newID !== prevID
-    shouldFetch && dispatch(selectPost(newID))
+    const { params: { slug: prevSlug } } = prevProps
+    const { dispatch, params: { postType, slug: newSlug } } = this.props
+    const slugChanged = newSlug !== prevSlug
+    slugChanged && dispatch(selectPost({ postType, slug: newSlug }))
+    slugChanged && dispatch(fetchPostsIfNeeded({ postType, query: { slug: newSlug } }))
   }
 
   render () {
@@ -58,8 +61,13 @@ Post.propTypes = {
 }
 
 function mapStateToProps ({posts}) {
-  const { selectedPost, items, isFetching, lastUpdated } = posts
-  const post = items[selectedPost] || { }
+  const { selectedPost: { postType, slug }, postsByType, isFetching, lastUpdated } = posts
+  let post
+  if (postsByType) {
+    post = postsByType[postType][slug] || { }
+  } else {
+    post = {}
+  }
 
   return {
     post,
