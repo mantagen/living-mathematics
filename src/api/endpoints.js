@@ -39,5 +39,6 @@ export const fetchUrlify = (params: FetchParams) => {
     prev = prev + curr + '=' + qs.escape(queryObject[curr]) + (i < arr.length - 1 ? '&' : '')
     return prev
   }, '')
-  return `${BASE_URL}/${postType}?${queryString}`
+  const qM = queryString ? '?' : ''
+  return `${BASE_URL}/${postType}${qM}${queryString}`
 }

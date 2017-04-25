@@ -12,9 +12,9 @@ import Post from './routes/post.jsx'
 export default (
   <Route component={App}>
     <Route path='/' slug={'home'} component={Page} />
-    <Route path='about' slug={'about'} component={Page} />
     <Route path='contact' slug={'contact'} component={Contact} />
-    <Route path=':postType' component={Posts} />
-    <Route path=':postType/:id' component={Post} />
+    <Route path=':slug' component={Page} />
+    <Route path=':postType/all' component={Posts} />
+    <Route path=':postType/:slug' component={Post} />
   </Route>
 )
