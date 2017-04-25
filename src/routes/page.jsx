@@ -3,20 +3,26 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPostsIfNeeded } from '../actions/posts.js'
+import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions.js'
+
+const slugger = props => props.route.slug || props.params.slug
 
 class Page extends Component {
   componentDidMount () {
-    const { dispatch, route: { slug } } = this.props
-    const params = { query: { slug } }
+    const { dispatch } = this.props
+    const slug = slugger(this.props)
+    const params = { postType: 'pages', query: { slug } }
+    dispatch(selectPost({ postType: 'pages', slug }))
     dispatch(fetchPostsIfNeeded(params))
   }
 
   componentDidUpdate (prevProps) {
-    const { route: { slug: prevSlug } } = prevProps
-    const { dispatch, route: { slug: newSlug } } = this.props
-    const shouldFetch = newSlug !== prevSlug
-    shouldFetch && dispatch(fetchPostsIfNeeded({ query: { slug: newSlug } }))
+    const { dispatch } = this.props
+    const prevSlug = slugger(prevProps)
+    const newSlug = slugger(this.props)
+    const slugChanged = newSlug !== prevSlug
+    slugChanged && dispatch(selectPost({ postType: 'pages', slug: newSlug }))
+    slugChanged && dispatch(fetchPostsIfNeeded({ postType: 'pages', query: { slug: newSlug } }))
   }
 
   render () {
@@ -59,8 +65,8 @@ Page.propTypes = {
 }
 
 function mapStateToProps ({posts}) {
-  const { selectedPost, items, isFetching, lastUpdated } = posts
-  const post = items[selectedPost] || { }
+  const { selectedPost: { postType, slug }, postsByType, isFetching, lastUpdated } = posts
+  const post = postsByType[postType][slug] || { }
 
   return {
     post,
