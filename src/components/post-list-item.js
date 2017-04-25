@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
-const PostListItem = ({ link, title, file, id, slug, snippet }) => {
+const PostListItem = ({ link, title, file, id, slug, snippet, type }) => {
   snippet = snippet || (file && file.description)
 
   return (
     <li className='article-listItem'>
-      <Link to={file ? file.url : `/post/${id}`} target={file && '_blank'}>
+      <Link to={file ? file.url : `/${type}/${slug}`} target={file && '_blank'}>
         <h2 className='article-listItem__title'>{title}
           { file && <span className='article-listItem__filetype'>{ file.ext }</span> }
         </h2>
@@ -24,7 +24,8 @@ PostListItem.propTypes = {
   slug: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   snippet: PropTypes.string.isRequired,
-  file: PropTypes.object
+  file: PropTypes.object,
+  type: PropTypes.string
 }
 
 export default PostListItem

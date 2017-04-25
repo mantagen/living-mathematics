@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchPostsIfNeeded } from '../actions/posts.js'
+import { fetchPostsIfNeeded } from '../actions/post-actions.js'
 import PostList from '../components/post-list.js'
 
 class Posts extends Component {
@@ -32,7 +32,9 @@ class Posts extends Component {
   }
 
   render () {
-    const { posts, isFetching, lastUpdated } = this.props
+    const { postsByType, isFetching, lastUpdated, params: { postType } } = this.props
+    const postsObject = postsByType[postType] || {}
+    const posts = Object.keys(postsObject).map(slug => postsObject[slug]).filter(post => !!post)
 
     return (
       <div>
@@ -59,7 +61,7 @@ class Posts extends Component {
         }
         {posts.length > 0 &&
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <PostList posts={posts} />
+            <PostList posts={posts} type={postType} />
           </div>
         }
       </div>
@@ -81,20 +83,17 @@ function mapStateToProps ({posts}) {
     activeQuery,
     isFetching,
     lastUpdated,
-    items,
-    itemOrder
+    postsByType
   } = posts || {
     isFetching: true,
-    items: {},
-    itemOrder: []
+    postsByType: {}
   }
-  const postIds = itemOrder || []
 
   return {
     activeQuery,
-    posts: postIds.map(id => items[id]).filter(item => !!item),
     isFetching,
-    lastUpdated
+    lastUpdated,
+    postsByType
   }
 }
 
