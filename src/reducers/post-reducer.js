@@ -5,11 +5,9 @@ import type { PostState } from './../types/types.js'
 const initialState: PostState = {
   activeQuery: undefined,
   didInvalidate: false,
+  error: undefined,
   isFetching: false,
-  postsByType: {
-    pages: {},
-    posts: {}
-  },
+  postsByType: {},
   lastUpdated: undefined,
   selectedPost: {
     postType: 'pages',
@@ -20,6 +18,7 @@ const initialState: PostState = {
 import {
   REQUEST_POSTS,
   RECEIVE_POSTS,
+  REQUEST_POSTS_FAILED,
   SELECT_POST
 } from '../actions/post-actions.js'
 
@@ -27,6 +26,7 @@ function posts (state: PostState = initialState, action: Object) {
   switch (action.type) {
     case REQUEST_POSTS: {
       return Object.assign({}, state, {
+        error: undefined,
         isFetching: true
       })
     }
@@ -38,6 +38,12 @@ function posts (state: PostState = initialState, action: Object) {
         isFetching: false,
         postsByType: Object.assign({}, state.postsByType, { [postType]: newPosts }),
         lastUpdated: receivedAt
+      })
+    }
+    case REQUEST_POSTS_FAILED: {
+      return Object.assign({}, state, {
+        isFetching: false,
+        error: action.error
       })
     }
     case SELECT_POST: {

@@ -7,6 +7,8 @@ import { Link } from 'react-router'
 
 import { fetchNavIfNeeded } from './../actions/nav-actions.js'
 
+import LoadingMoon from './../components/loading-moon.js'
+
 class Nav extends Component {
   componentDidMount () {
     const { dispatch } = this.props
@@ -14,11 +16,15 @@ class Nav extends Component {
   }
 
   render () {
-    const { navItems } = this.props
+    const { isFetching, navItems } = this.props
     return (
       <nav>
         <ul className='nav'>
-          { navItems.map(navItem) }
+          {
+            isFetching
+              ? <div className='nav__loading'><LoadingMoon /></div>
+              : navItems.map(navItem)
+          }
         </ul>
       </nav>
     )
@@ -56,4 +62,3 @@ function mapStateToProps ({nav}) {
 }
 
 export default connect(mapStateToProps)(Nav)
-// export default connect((({ nav }) => ({ navItems: nav.items })))(Nav)
