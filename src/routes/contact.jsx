@@ -1,20 +1,37 @@
 import React from 'react'
 import fetch from 'isomorphic-fetch'
 
-import ContactForm from '../containers/contact-form.jsx'
+import { SubmissionError } from 'redux-form'
+
+import ContactForm from '../components/contact-form.js'
+
+import responseHandler from '../api/response-handler.js'
 
 export default class ContactPage extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      messageSent: false
+    }
+  }
   submit (values) {
-    fetch('http://localhost:1212/contact', {
+    return fetch('http://localhost:1212/contact0', {
       method: 'post',
       body: JSON.stringify(values)
     })
-      .then(response => response.json())
-      .then(console.log)
+      .then(responseHandler)
+      .then(() => {
+        this.setState({
+          messageSent: true
+        })
+      })
+      .catch(err => {
+        throw new SubmissionError({_error: err.message})
+      })
   }
   render () {
     return (
-      <ContactForm onSubmit={this.submit} />
+      <ContactForm onSubmit={this.submit} messageSent={this.state.messageSent} />
     )
   }
 }

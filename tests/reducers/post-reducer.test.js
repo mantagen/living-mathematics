@@ -59,8 +59,7 @@ describe('posts reducer', () => {
       activeQuery: fetchParams,
       isFetching: false,
       postsByType: {
-        posts: {[samplePost.slug]: samplePost},
-        pages: {}
+        posts: {[samplePost.slug]: samplePost}
       },
       lastUpdated: thisDate
     }))

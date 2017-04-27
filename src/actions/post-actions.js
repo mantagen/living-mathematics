@@ -10,9 +10,11 @@ import type {
 import fetch from 'isomorphic-fetch'
 
 import { fetchUrlify } from './../api/endpoints.js'
+import { responseHandler } from './../api/response-handler.js'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+export const REQUEST_POSTS_FAILED = 'REQUEST_POSTS_FAILED'
 export const SELECT_POST = 'SELECT_POST'
 
 export const fileMap = (acf: any): any => {
@@ -73,12 +75,21 @@ export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
   }
 }
 
+export function requestPostsFailed () {
+  return {
+    type: REQUEST_POSTS_FAILED,
+    error: 'There was a problem connecting, please try refreshing the page.'
+  }
+}
+
 export function fetchPosts (fetchParams: FetchParams) {
   return (dispatch: Function) => {
     dispatch(requestPosts(fetchParams))
     return fetch(fetchUrlify(fetchParams))
+      .then(responseHandler)
       .then(response => response.json())
       .then(json => dispatch(receivePosts(fetchParams, json)))
+      .catch(err => dispatch(requestPostsFailed(err)))
   }
 }
 

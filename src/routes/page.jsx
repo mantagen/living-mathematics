@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 
 import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions.js'
 
+import Content from '../components/content.js'
+
 const slugger = props => props.route.slug || props.params.slug
 
 class Page extends Component {
@@ -26,34 +28,7 @@ class Page extends Component {
   }
 
   render () {
-    const { post: { id, title, content }, isFetching, lastUpdated } = this.props
-    return (
-      <section>
-        <p>
-          {lastUpdated &&
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>
-          }
-        </p>
-        {isFetching && !id &&
-          <h2>Loading...</h2>
-        }
-        {!isFetching && !id &&
-          <h2>Could not find post.</h2>
-        }
-        {title &&
-          <article style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <h1 className='article__title'>{ title }</h1>
-            <div
-              className='article__content'
-              dangerouslySetInnerHTML={{__html: content}}
-            />
-          </article>
-        }
-      </section>
-    )
+    return <Content {...this.props} />
   }
 }
 
@@ -65,13 +40,16 @@ Page.propTypes = {
 }
 
 function mapStateToProps ({posts}) {
-  const { selectedPost: { postType, slug }, postsByType, isFetching, lastUpdated } = posts
-  const post = postsByType[postType][slug] || { }
+  const { error, selectedPost: { postType, slug }, postsByType, isFetching } = posts
+  let post = {}
+  if (postsByType[postType]) {
+    post = postsByType[postType][slug] || {}
+  }
 
   return {
-    post,
+    error,
     isFetching,
-    lastUpdated
+    post
   }
 }
 
