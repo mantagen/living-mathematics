@@ -6,10 +6,7 @@ const initialState = {
   activeQuery: undefined,
   didInvalidate: false,
   isFetching: false,
-  postsByType: {
-    pages: {},
-    posts: {}
-  },
+  postsByType: {},
   lastUpdated: undefined,
   selectedPost: {
     postType: 'pages',

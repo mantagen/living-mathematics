@@ -34,11 +34,13 @@ export const fetchUrlify = (params: FetchParams) => {
   if (id) {
     return `${BASE_URL}/${postType}/${id}`
   }
+  if (!Object.keys(query)[0]) {
+    return `${BASE_URL}/${postType}`
+  }
   const queryObject = WPQueryify(query)
   const queryString = Object.keys(queryObject).reduce((prev, curr, i, arr) => {
     prev = prev + curr + '=' + qs.escape(queryObject[curr]) + (i < arr.length - 1 ? '&' : '')
     return prev
   }, '')
-  const qM = queryString ? '?' : ''
-  return `${BASE_URL}/${postType}${qM}${queryString}`
+  return `${BASE_URL}/${postType}?${queryString}`
 }
