@@ -4,7 +4,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 
-import rootReducer from '../reducer.js'
+import rootReducer from '../reducer'
 
 const loggerMiddleware = createLogger()
 

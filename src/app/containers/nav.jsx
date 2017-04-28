@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 
 import { Link } from 'react-router'
 
-import { fetchNavIfNeeded } from './../actions/nav-actions.js'
+import { fetchNavIfNeeded } from './../actions/nav-actions'
 
-import LoadingMoon from './../components/loading-moon.js'
+import LoadingMoon from './../components/loading-moon'
 
 class Nav extends Component {
   componentDidMount () {

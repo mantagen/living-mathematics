@@ -1,9 +1,9 @@
 import React from 'react'
 
-import Nav from './containers/nav.jsx'
+import Nav from './containers/nav'
 
-import FeaturedImage from './components/featured-image.js'
-import Logo from './components/logo.jsx'
+import FeaturedImage from './components/featured-image'
+import Logo from './components/logo'
 
 class App extends React.Component {
   render () {

@@ -1,6 +1,6 @@
 // @flow
 
-import * as types from './../../src/types/types.js'
+import * as types from '../../src/app/types/types'
 
 const initialState = {
   activeQuery: undefined,

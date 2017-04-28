@@ -1,6 +1,6 @@
 // @flow
 
-import type { NavState } from './../types/types.js'
+import type { NavState } from './../types/types'
 
 const initialState: NavState = {
   isFetching: false,
@@ -10,7 +10,7 @@ const initialState: NavState = {
 import {
   REQUEST_NAV,
   RECEIVE_NAV
-} from '../actions/nav-actions.js'
+} from '../actions/nav-actions'
 
 function nav (state: NavState = initialState, action: Object) {
   switch (action.type) {

@@ -1,10 +1,10 @@
 // @flow
 
-import type { NavState } from './../types/types.js'
+import type { NavState } from './../types/types'
 
 import fetch from 'isomorphic-fetch'
 
-import { menuUrl, trimDomainIfExists } from './../api/endpoints.js'
+import { menuUrl, trimDomainIfExists } from './../api/endpoints'
 
 export const REQUEST_NAV = 'REQUEST_NAV'
 export const RECEIVE_NAV = 'RECEIVE_NAV'

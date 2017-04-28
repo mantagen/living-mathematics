@@ -2,12 +2,12 @@ import React from 'react'
 
 import { Route } from 'react-router'
 
-import App from './app.jsx'
+import App from './app'
 
-import Contact from './routes/contact.jsx'
-import Page from './routes/page.jsx'
-import Posts from './routes/posts.jsx'
-import Post from './routes/post.jsx'
+import Contact from './routes/contact'
+import Page from './routes/page'
+import Posts from './routes/posts'
+import Post from './routes/post'
 
 export default (
   <Route component={App}>

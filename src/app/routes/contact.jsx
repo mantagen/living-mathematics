@@ -3,9 +3,9 @@ import fetch from 'isomorphic-fetch'
 
 import { SubmissionError } from 'redux-form'
 
-import ContactForm from '../components/contact-form.js'
+import ContactForm from '../components/contact-form'
 
-import responseHandler from '../api/response-handler.js'
+import responseHandler from '../api/response-handler'
 
 export default class ContactPage extends React.Component {
   constructor () {

@@ -4,8 +4,8 @@ import React from 'react'
 import { renderToString as Render } from 'react-dom/server'
 import { RouterContext, match as Match } from 'react-router'
 import { Provider } from 'react-redux'
-import Routes from '../src/routes.js'
-import CreateStore from '../src/store/configure-store.js'
+import Routes from '../app/routes'
+import CreateStore from '../app/store/configure-store'
 
 const store = CreateStore()
 

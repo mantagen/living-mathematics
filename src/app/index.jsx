@@ -4,8 +4,8 @@ import { Provider } from 'react-redux'
 import { Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 
-import configureStore from './store/configure-store.js'
-import Routes from './routes.js'
+import configureStore from './store/configure-store'
+import Routes from './routes'
 
 const initialState = window.__INITIAL_STATE__
 

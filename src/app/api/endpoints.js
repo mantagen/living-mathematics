@@ -1,6 +1,6 @@
 // @flow
 
-import type { FetchParams, LocalQuery, WPQuery } from './../types/types.js'
+import type { FetchParams, LocalQuery, WPQuery } from './../types/types'
 
 import qs from 'querystring-browser'
 

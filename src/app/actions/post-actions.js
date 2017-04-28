@@ -5,12 +5,12 @@ import type {
   WPPost,
   LocalPost,
   PostState
-} from './../types/types.js'
+} from './../types/types'
 
 import fetch from 'isomorphic-fetch'
 
-import { fetchUrlify } from './../api/endpoints.js'
-import { responseHandler } from './../api/response-handler.js'
+import { fetchUrlify } from './../api/endpoints'
+import { responseHandler } from './../api/response-handler'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'

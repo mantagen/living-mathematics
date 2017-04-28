@@ -2,14 +2,14 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
 
-import * as actions from './../../src/actions/post-actions.js'
-import { BASE_URL } from './../../src/api/endpoints.js'
+import * as actions from '../../src/app/actions/post-actions'
+import { BASE_URL } from '../../src/app/api/endpoints'
 import {
   generateFetchParams,
   generateWPPostObject,
   generateWPResponse,
   generateState
-} from './../helpers/posts-data.js'
+} from '../helpers/posts-data.js'
 
 const middlewares = [ thunk ]
 const mockStore = configureMockStore(middlewares)
