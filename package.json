@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack && babel src --out-dir lib --copy-files",
-    "start": "npm run build && node \"./lib/server/server.js\"",
+    "start": "node \"./lib/server/server.js\"",
     "dev": "npm run dev-build && babel-node \"./src/server/server.js\"",
     "dev-build": "npm run lint && webpack",
     "dev-start": "babel-node \"./src/server/server.js\"",
