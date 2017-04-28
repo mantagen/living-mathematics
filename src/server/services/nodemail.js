@@ -1,4 +1,6 @@
-const env2 = require('env2')('./config.env') // eslint-disable-line
+if(process.env.NODE_ENV !== 'production') {
+  const env2 = require('env2')('./config.env') // eslint-disable-line
+}
 
 const nodemailer = require('nodemailer')
 
