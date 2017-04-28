@@ -36,7 +36,7 @@ const template = formData => (
   \n ${formData.name} emailed.
   \n Here is their message:
   \n ${formData.message}
-  \n Here is there email:
+  \n Here is their email:
   \n ${formData.email}`
 )
 // setup email data with unicode symbols
