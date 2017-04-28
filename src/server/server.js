@@ -18,7 +18,7 @@ const server = new Hapi.Server({
 })
 server.connection({
   host: 'localhost',
-  port: 1212
+  port: process.env.PORT || 1212
 })
 
 const logger = (request, reply) => {
