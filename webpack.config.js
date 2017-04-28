@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/index.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'assets/js')
   },
   module: {
     loaders: [{
@@ -17,5 +17,8 @@ module.exports = {
       loader: 'babel-loader'
     }]
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  devServer: {
+    historyApiFallback: true
+  }
 };

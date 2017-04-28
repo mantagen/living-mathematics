@@ -1,16 +1,24 @@
 import React from 'react'
-import { Link } from 'react-router'
 
 import Nav from './containers/nav.jsx'
 
+import FeaturedImage from './components/featured-image.js'
+import Logo from './components/logo.jsx'
+
 class App extends React.Component {
-  render() {
+  render () {
     return (
-      <div>
+      <div className='site-wrapper'>
         <header>
+          <FeaturedImage />
           <Nav />
         </header>
-        { this.props.children }
+        <main>
+          { this.props.children }
+        </main>
+        <footer>
+          <Logo />
+        </footer>
       </div>
     )
   }

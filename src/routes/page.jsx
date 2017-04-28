@@ -7,20 +7,24 @@ import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions.js'
 
 import Content from '../components/content.js'
 
-class Post extends Component {
+const slugger = props => props.route.slug || props.params.slug
+
+class Page extends Component {
   componentDidMount () {
-    const { dispatch, params: { postType, slug } } = this.props
-    const params = { postType, query: { slug } }
-    dispatch(selectPost({ postType, slug }))
+    const { dispatch } = this.props
+    const slug = slugger(this.props)
+    const params = { postType: 'pages', query: { slug } }
+    dispatch(selectPost({ postType: 'pages', slug }))
     dispatch(fetchPostsIfNeeded(params))
   }
 
   componentDidUpdate (prevProps) {
-    const { params: { slug: prevSlug } } = prevProps
-    const { dispatch, params: { postType, slug: newSlug } } = this.props
+    const { dispatch } = this.props
+    const prevSlug = slugger(prevProps)
+    const newSlug = slugger(this.props)
     const slugChanged = newSlug !== prevSlug
-    slugChanged && dispatch(selectPost({ postType, slug: newSlug }))
-    slugChanged && dispatch(fetchPostsIfNeeded({ postType, query: { slug: newSlug } }))
+    slugChanged && dispatch(selectPost({ postType: 'pages', slug: newSlug }))
+    slugChanged && dispatch(fetchPostsIfNeeded({ postType: 'pages', query: { slug: newSlug } }))
   }
 
   render () {
@@ -28,7 +32,7 @@ class Post extends Component {
   }
 }
 
-Post.propTypes = {
+Page.propTypes = {
   post: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   lastUpdated: PropTypes.number,
@@ -49,4 +53,4 @@ function mapStateToProps ({posts}) {
   }
 }
 
-export default connect(mapStateToProps)(Post)
+export default connect(mapStateToProps)(Page)

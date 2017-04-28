@@ -4,22 +4,53 @@ import type {
   FetchParams,
   WPPost,
   LocalPost,
-  LocalPostId,
   PostState
 } from './../types/types.js'
 
 import fetch from 'isomorphic-fetch'
 
 import { fetchUrlify } from './../api/endpoints.js'
+import { responseHandler } from './../api/response-handler.js'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
+export const REQUEST_POSTS_FAILED = 'REQUEST_POSTS_FAILED'
 export const SELECT_POST = 'SELECT_POST'
 
-export function selectPost (id: LocalPostId) {
+export const fileMap = (acf: any): any => {
+  if (!acf) {
+    return undefined
+  } else if (!acf.file) {
+    return undefined
+  } else {
+    const fnArr = acf.file.filename.split('.')
+    return {
+      id: acf.file.id,
+      url: acf.file.url,
+      ext: fnArr[fnArr.length - 1],
+      description: acf.description
+    }
+  }
+}
+
+export const postMap = (post: WPPost): LocalPost => ({
+  content: post.content ? post.content.rendered : '',
+  id: post.id,
+  date: post.date,
+  file: fileMap(post.acf),
+  link: post.link,
+  slug: post.slug,
+  snippet: post.excerpt ? post.excerpt.rendered : '',
+  title: post.title.rendered,
+  type: post.type
+})
+
+export function selectPost (identifier: Object) {
+  const { postType, slug } = identifier
   return {
     type: SELECT_POST,
-    id
+    postType,
+    slug
   }
 }
 
@@ -30,16 +61,6 @@ export function requestPosts (fetchParams: FetchParams) {
   }
 }
 
-export const postMap = (post: WPPost): LocalPost => ({
-  content: post.content ? post.content.rendered : '',
-  id: post.id,
-  date: post.date,
-  link: post.link,
-  slug: post.slug,
-  title: post.title.rendered,
-  snippet: post.excerpt ? post.excerpt.rendered : ''
-})
-
 export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
   return {
     type: RECEIVE_POSTS,
@@ -47,11 +68,17 @@ export function receivePosts (fetchParams: FetchParams, json: Array<Object>) {
     posts: json
       .filter(post => post.status === 'publish')
       .reduce((accum, post) => {
-        accum[post.id.toString()] = postMap(post)
+        accum[post.slug] = postMap(post)
         return accum
       }, {}),
-    order: json.map(post => post.id.toString()),
     receivedAt: Date.now()
+  }
+}
+
+export function requestPostsFailed () {
+  return {
+    type: REQUEST_POSTS_FAILED,
+    error: 'There was a problem connecting, please try refreshing the page.'
   }
 }
 
@@ -59,15 +86,22 @@ export function fetchPosts (fetchParams: FetchParams) {
   return (dispatch: Function) => {
     dispatch(requestPosts(fetchParams))
     return fetch(fetchUrlify(fetchParams))
+      .then(responseHandler)
       .then(response => response.json())
       .then(json => dispatch(receivePosts(fetchParams, json)))
+      .catch(err => dispatch(requestPostsFailed(err)))
   }
 }
 
 export function shouldFetchPosts (state: PostState, fetchParams: FetchParams) {
-  const { items, activeQuery } = state
-  if (!Object.keys(items)[0]) {
+  const { postType, query: { slug } } = fetchParams
+  const { postsByType: { [postType]: items }, activeQuery } = state
+  if (!items) {
     return true
+  } else if (!Object.keys(items)[0]) {
+    return true
+  } else if (items.hasOwnProperty(slug)) {
+    return false
     // note: order of fetchParams matters for below condition to have any use
   } else if (JSON.stringify(activeQuery) !== JSON.stringify(fetchParams)) {
     return true

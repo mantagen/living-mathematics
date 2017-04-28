@@ -2,11 +2,12 @@ import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import nock from 'nock'
 
-import * as actions from './../../src/actions/posts'
-import { fetchUrlify } from './../../src/api/endpoints.js'
+import * as actions from './../../src/actions/post-actions.js'
+import { BASE_URL } from './../../src/api/endpoints.js'
 import {
   generateFetchParams,
   generateWPPostObject,
+  generateWPResponse,
   generateState
 } from './../helpers/posts-data.js'
 
@@ -18,25 +19,28 @@ describe('async actions', () => {
     nock.cleanAll()
   })
 
-  it('creates RECEIVE_POSTS when fetching pasts has been done', () => {
-    const id = "1"
-    const fetchParams = generateFetchParams({ id })
-    const postResponse = generateWPPostObject()
-    nock(fetchUrlify(fetchParams))
-      .get('')
-      .reply(200, [postResponse])
+  it('creates RECEIVE_POSTS when fetching posts has been done\n.'
+    + 'if many items are returned, it does not create SELECT_POST', () => {
+    const postType = 'posts'
+    const fetchParams = generateFetchParams({ postType })
+    const postResponse = generateWPResponse(5)
+    nock(BASE_URL)
+      .get(`/${postType}`)
+      .reply(200, postResponse)
 
-    const transformedPost = actions.postMap(postResponse)
-    const expectedActions = [
-      { type: actions.REQUEST_POSTS,
-        fetchParams },
-      { type: actions.RECEIVE_POSTS,
-        fetchParams,
-        posts: { [id]: transformedPost },
-        order: [id]
-      }
-    ]
-    const store = mockStore({ todos: [] })
+    const transformedPosts = postResponse.map(actions.postMap)
+    const expectedActions = [{
+      type: actions.REQUEST_POSTS,
+      fetchParams
+    }, {
+      type: actions.RECEIVE_POSTS,
+      fetchParams,
+      posts: transformedPosts.reduce((accum, post) => {
+        accum[post.slug] = post
+        return accum
+      }, {})
+    }]
+    const store = mockStore({})
 
     return store.dispatch(actions.fetchPosts(fetchParams))
       .then(() => { // return of async actions
@@ -48,12 +52,14 @@ describe('async actions', () => {
 
 describe('select a post', () => {
   it('should create an action to select a post', () => {
-    const id = 1
+    const postType = 'page'
+    const slug = 'home'
     const expectedAction = {
       type: actions.SELECT_POST,
-      id
+      postType,
+      slug
     }
-    expect(actions.selectPost(id)).toEqual(expectedAction)
+    expect(actions.selectPost({ postType, slug })).toEqual(expectedAction)
   })
 })
 
@@ -70,7 +76,7 @@ describe('request posts', () => {
 
 describe('receive posts', () => {
   it('should create an action to receive posts', () => {
-    const fetchParams = {}
+    const fetchParams = generateFetchParams()
     const json = []
     const expectedAction = {
       type: actions.RECEIVE_POSTS,
@@ -87,18 +93,27 @@ describe('receive posts', () => {
 })
 
 describe('shouldFetchPosts', () => {
+  const postType = 'posts'
   it('should return true with initialState -> no items', () => {
     const initialState = generateState()
-    expect(actions.shouldFetchPosts(initialState)).toEqual(true)
+    expect(actions.shouldFetchPosts(initialState, generateFetchParams())).toEqual(true)
   })
   it('should return false if already fetching', () => {
     const item = generateWPPostObject()
-    const state = generateState({ items: { [item.id]: item }, isFetching: true })
-    expect(actions.shouldFetchPosts(state)).toEqual(false)
+    const fetchParams = generateFetchParams()
+    const state = generateState({
+      activeQuery: fetchParams,
+      postsByType: { [postType]: actions.postMap(generateWPPostObject({ postType })) },
+      isFetching: true
+    })
+    expect(actions.shouldFetchPosts(state, fetchParams)).toEqual(false)
   })
   it('should return true if query as been invalidated', () => {
     const item = generateWPPostObject()
-    const state = generateState({ items: { [item.id]: item }, didInvalidate: true })
-    expect(actions.shouldFetchPosts(state)).toEqual(true)
+    const state = generateState({
+      postsByType: { [postType]: actions.postMap(generateWPPostObject()) },
+      didInvalidate: true
+    })
+    expect(actions.shouldFetchPosts(state, generateFetchParams())).toEqual(true)
   })
 })

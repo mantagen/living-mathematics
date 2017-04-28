@@ -10,15 +10,28 @@ export type LocalQuery = {
 
 export type FetchParams = {
   id?: number,
-  postType?: string,
+  postType: string,
   query: LocalQuery
+}
+
+export type File = {
+  id: string,
+  url: string,
+}
+
+export type Slug = string
+
+export type Acf = {
+  file?: File
 }
 
 export type LocalPost = {
   content: string,
   date: string,
   id: LocalPostId,
+  file?: File,
   link: string,
+  type: string,
   slug: string,
   title: string,
   snippet: string
@@ -29,23 +42,31 @@ type Rendered = {
 }
 
 export type WPPost = {
+  acf?: Object,
   content: Rendered,
   date: string,
   id: LocalPostId,
   link: string,
   slug: string,
   title: Rendered,
+  type: string,
   excerpt?: Rendered
+}
+
+export type PostsByType = { [slug: Slug]: LocalPost }
+
+type SelectedPost = {
+  postType: string,
+  slug: string
 }
 
 export type PostState = {
   activeQuery?: FetchParams,
   didInvalidate: boolean,
   isFetching: boolean,
-  items: { [id: LocalPostId]: LocalPost },
-  itemOrder: Array<LocalPostId>,
+  postsByType: { [string]: PostsByType },
   lastUpdated?: Date,
-  selectedPost?: number,
+  selectedPost?: SelectedPost
 }
 
 export type NavState = {

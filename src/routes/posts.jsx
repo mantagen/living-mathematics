@@ -2,64 +2,43 @@
 
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { fetchPostsIfNeeded } from '../actions/posts.js'
+
+import { fetchPostsIfNeeded } from '../actions/post-actions.js'
+
 import PostList from '../components/post-list.js'
+import LoadingMoon from '../components/loading-moon.js'
 
 class Posts extends Component {
-  constructor (props) {
-    super(props)
-    // $FlowFixMe
-    this.handleRefreshClick = this.handleRefreshClick.bind(this)
-  }
-
   componentDidMount () {
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
+    const { activeQuery, dispatch, params: { postType } } = this.props
+    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType, query: {} })))
   }
 
   componentDidUpdate (prevProps) {
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    if (postType !== prevProps.route.postType) {
-      dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
+    const { activeQuery, dispatch, params: { postType } } = this.props
+    if (postType !== prevProps.params.postType) {
+      dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType, query: {} })))
     }
   }
 
-  handleRefreshClick (e) {
-    e.preventDefault()
-
-    const { activeQuery, dispatch, route: { postType } } = this.props
-    dispatch(fetchPostsIfNeeded(Object.assign({}, activeQuery, { postType })))
-  }
-
   render () {
-    const { activeQuery, posts, isFetching, lastUpdated } = this.props
-
+    const { postsByType, error, isFetching, params: { postType } } = this.props
+    const postsObject = postsByType[postType] || {}
+    const posts = Object.keys(postsObject).map(slug => postsObject[slug]).filter(post => !!post)
     return (
       <div>
-        { JSON.stringify(activeQuery) }
-        <p>
-          {lastUpdated &&
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>
-          }
-          {!isFetching &&
-            <a href='#'
-              onClick={this.handleRefreshClick}>
-              Refresh
-            </a>
-          }
-        </p>
         {isFetching && posts.length === 0 &&
-          <h2>Loading...</h2>
+          <LoadingMoon />
         }
-        {!isFetching && posts.length === 0 &&
-          <h2>Empty.</h2>
+        {!isFetching && error &&
+          <h2>{error}</h2>
+        }
+        {!isFetching && !error && posts.length === 0 &&
+          <h2>No posts found.</h2>
         }
         {posts.length > 0 &&
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <PostList posts={posts} />
+            <PostList posts={posts} type={postType} />
           </div>
         }
       </div>
@@ -79,22 +58,19 @@ Posts.propTypes = {
 function mapStateToProps ({posts}) {
   const {
     activeQuery,
+    error,
     isFetching,
-    lastUpdated,
-    items,
-    itemOrder
+    postsByType
   } = posts || {
     isFetching: true,
-    items: {},
-    itemOrder: [],
+    postsByType: {}
   }
-  const postIds = itemOrder
 
   return {
     activeQuery,
-    posts: postIds.map(id => items[id]).filter(item => !!item),
+    error,
     isFetching,
-    lastUpdated
+    postsByType
   }
 }
 

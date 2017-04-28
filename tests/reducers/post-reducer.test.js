@@ -1,5 +1,5 @@
-import reducer from './../../src/reducers/posts.js'
-import * as actions from './../../src/actions/posts.js'
+import reducer from './../../src/reducers/post-reducer.js'
+import * as actions from './../../src/actions/post-actions.js'
 
 import {
   generateFetchParams,
@@ -17,13 +17,17 @@ describe('posts reducer', () => {
   })
 
   it('should handle SELECT_POST', () => {
-    const id = 1
+    const postType = 'page'
+    const slug = 'home'
     expect(
       reducer(initialState, {
         type: actions.SELECT_POST,
-        id: id
+        postType,
+        slug
       })
-    ).toEqual(Object.assign({}, initialState, { selectedPost: id }))
+    ).toEqual(Object.assign({}, initialState, {
+      selectedPost: { postType, slug }
+    }))
   })
 
   it('should handle REQUEST_POSTS', () => {
@@ -37,7 +41,8 @@ describe('posts reducer', () => {
   })
 
   it('should handle RECEIVE_POSTS', () => {
-    const fetchParams = generateFetchParams({ query: { category: 'blog' }})
+    const postType = 'posts'
+    const fetchParams = generateFetchParams({ postType })
     const samplePost = generateWPPostObject()
     const state = Object.assign({}, initialState, { isFetching: true })
     const thisDate = Date.now()
@@ -45,19 +50,17 @@ describe('posts reducer', () => {
       reducer(state, {
         type: actions.RECEIVE_POSTS,
         fetchParams: fetchParams,
-        order: [samplePost.id.toString()],
         posts: {
-          [samplePost.id.toString()]: samplePost
+          [samplePost.slug]: samplePost
         },
         receivedAt: thisDate
       })
     ).toEqual(Object.assign({}, state, {
       activeQuery: fetchParams,
       isFetching: false,
-      items: {
-        [samplePost.id.toString()]: samplePost
+      postsByType: {
+        posts: {[samplePost.slug]: samplePost}
       },
-      itemOrder: [samplePost.id.toString()],
       lastUpdated: thisDate
     }))
   })
