@@ -1,10 +1,13 @@
 var path = require('path');
 
 module.exports = {
-  entry: './src/index.jsx',
+  entry: './src/app/index.jsx',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'assets/js')
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
   },
   module: {
     loaders: [{

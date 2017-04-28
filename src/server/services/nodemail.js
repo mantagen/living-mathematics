@@ -1,8 +1,14 @@
-const env2 = require('env2')('./config.env')
+const env2 = require('env2')('./config.env') // eslint-disable-line
 
 const nodemailer = require('nodemailer')
 
-const { RECIPIENT_EMAIL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env
+const {
+  RECIPIENT_EMAIL,
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASS
+} = process.env
 
 const allGood = arr => arr.reduce((prev, curr) => !!prev && !!curr)
 if (!allGood([RECIPIENT_EMAIL, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS])) {
@@ -25,9 +31,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((err, success) => {
   if (err) {
-    console.log(err);
+    console.log(err)
   } else {
-    console.log(`Server is ready to send messages on behalf of ${SMTP_USER}`);
+    console.log(`Server is ready to send messages on behalf of ${SMTP_USER}`)
   }
 })
 
@@ -52,9 +58,9 @@ export const send = (data, cb) => {
   const mailOptions = options(data)
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
-      console.log(err);
+      console.log(err)
     } else {
-      console.log('Message %s sent: %s', info.messageId, info.response);
+      console.log('Message %s sent: %s', info.messageId, info.response)
     }
     return cb(err, info)
   })

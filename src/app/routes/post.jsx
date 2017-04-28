@@ -3,9 +3,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions.js'
+import { fetchPostsIfNeeded, selectPost } from '../actions/post-actions'
 
-import Content from '../components/content.js'
+import Content from '../components/content'
 
 class Post extends Component {
   componentDidMount () {

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
-import LoadingMoon from '../components/loading-moon.js'
-import Textarea from '../components/textarea.jsx'
+import LoadingMoon from '../components/loading-moon'
+import Textarea from '../components/textarea'
 
 const ContactForm = props => {
   const { error, handleSubmit, pristine, submitting, messageSent } = props
