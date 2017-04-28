@@ -15,7 +15,7 @@ export default class ContactPage extends React.Component {
     }
   }
   submit (values) {
-    return fetch('http://localhost:1212/contact', {
+    return fetch('/contact', {
       method: 'post',
       body: JSON.stringify(values)
     })
