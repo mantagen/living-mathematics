@@ -1,7 +1,12 @@
+# Environment files
+*.env
+
+# Compliled code
+lib
+
 # React bundle
 bundle.js
 bundle.js.map
-lib
 
 # Logs
 logs
