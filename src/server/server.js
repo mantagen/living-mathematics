@@ -17,7 +17,7 @@ const server = new Hapi.Server({
   }
 })
 server.connection({
-  host: 'localhost',
+  host: process.env.host || 'localhost',
   port: process.env.PORT || 1212
 })
 
