@@ -2,7 +2,7 @@ import {
   BASE_URL,
   WPQueryify,
   fetchUrlify,
-} from './../../src/api/endpoints.js'
+} from '../../src/app/api/endpoints'
 
 describe('WPQuerify', () => {
   const localQuery = {

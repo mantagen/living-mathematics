@@ -3,17 +3,15 @@ import Path from 'path'
 import Inert from 'inert'
 import Vision from 'vision'
 
-import fetch from 'isomorphic-fetch'
-
-import reactRender from './react-render.js'
-import { send } from './services/nodemail.js'
+import reactRender from './react-render'
+import { send } from './services/nodemail'
 
 // Create a server with a host and port
 const server = new Hapi.Server({
   connections: {
     routes: {
       files: {
-        relativeTo: Path.join(__dirname, '../assets')
+        relativeTo: Path.join(__dirname, '../../assets')
       }
     }
   }
@@ -57,7 +55,7 @@ server.register([Vision, Inert], (err) => {
       const { payload } = request
       send(JSON.parse(payload), (err) => {
         if (err) {
-          reply({ status: 'not ok'}).code(503)
+          reply({ status: 'not ok' }).code(503)
         } else {
           reply({ status: 'ok' })
         }

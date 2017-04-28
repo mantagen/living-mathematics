@@ -1,11 +1,11 @@
-import reducer from './../../src/reducers/post-reducer.js'
-import * as actions from './../../src/actions/post-actions.js'
+import reducer from '../../src/app/reducers/post-reducer'
+import * as actions from '../../src/app/actions/post-actions'
 
 import {
   generateFetchParams,
   generateState,
   generateWPPostObject
-} from './../helpers/posts-data.js'
+} from '../helpers/posts-data'
 
 const initialState = generateState()
 

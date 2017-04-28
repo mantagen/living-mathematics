@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-import PostListItem from './post-list-item.js'
+import PostListItem from './post-list-item'
 
 const PostList = ({ posts, type }) => {
   const postListItems = posts.map((post, i) => <PostListItem {...post} type={type} key={`article-postListItem-${i}`} />)

@@ -1,6 +1,6 @@
 // @flow
 
-import type { PostState } from './../types/types.js'
+import type { PostState } from './../types/types'
 
 const initialState: PostState = {
   activeQuery: undefined,
@@ -20,7 +20,7 @@ import {
   RECEIVE_POSTS,
   REQUEST_POSTS_FAILED,
   SELECT_POST
-} from '../actions/post-actions.js'
+} from '../actions/post-actions'
 
 function posts (state: PostState = initialState, action: Object) {
   switch (action.type) {

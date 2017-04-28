@@ -3,10 +3,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchPostsIfNeeded } from '../actions/post-actions.js'
+import { fetchPostsIfNeeded } from '../actions/post-actions'
 
-import PostList from '../components/post-list.js'
-import LoadingMoon from '../components/loading-moon.js'
+import PostList from '../components/post-list'
+import LoadingMoon from '../components/loading-moon'
 
 class Posts extends Component {
   componentDidMount () {

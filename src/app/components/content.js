@@ -1,6 +1,6 @@
 import React from 'react'
 
-import LoadingMoon from './loading-moon.js'
+import LoadingMoon from './loading-moon'
 
 const Content = ({ post: { id, title, content }, error, isFetching }) => (
   <section>
