@@ -17116,6 +17116,7 @@ var ContactPage = function (_React$Component) {
     _this.state = {
       messageSent: false
     };
+    _this.submit = _this.submit.bind(_this);
     return _this;
   }
 

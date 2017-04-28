@@ -13,6 +13,7 @@ export default class ContactPage extends React.Component {
     this.state = {
       messageSent: false
     }
+    this.submit = this.submit.bind(this)
   }
   submit (values) {
     return fetch('/contact', {
