@@ -4,8 +4,8 @@ import type { FetchParams, LocalQuery, WPQuery } from './../types/types'
 
 import qs from 'querystring-browser'
 
-export const SITE_DOMAIN = 'http://livingmathematics.techniqueandquo.uk/wp'
-export const BASE_URL = 'http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2'
+export const SITE_DOMAIN = 'http://livingmathematics.mantagen.org/wp'
+export const BASE_URL = 'http://livingmathematics.mantagen.org/wp/wp-json/wp/v2'
 const queryMapping = {
   category: 'filter[cat_name]',
   slug: 'filter[name]',
@@ -27,7 +27,7 @@ const keysMap = (mapping: Object) => (query: LocalQuery): WPQuery => {
 
 // for now menu id to be input manually to save second request being made
 const menuId = 5
-export const menuUrl = `http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp-api-menus/v2/menus/${menuId}`
+export const menuUrl = `http://livingmathematics.mantagen.org/wp/wp-json/wp-api-menus/v2/menus/${menuId}`
 
 export const fetchUrlify = (params: FetchParams) => {
   const { id, postType = 'pages', query = {} } = params

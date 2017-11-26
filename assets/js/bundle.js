@@ -10406,8 +10406,8 @@ var _querystringBrowser2 = _interopRequireDefault(_querystringBrowser);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SITE_DOMAIN = exports.SITE_DOMAIN = 'http://livingmathematics.techniqueandquo.uk/wp';
-var BASE_URL = exports.BASE_URL = 'http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2';
+var SITE_DOMAIN = exports.SITE_DOMAIN = 'http://livingmathematics.mantagen.org/wp';
+var BASE_URL = exports.BASE_URL = 'http://livingmathematics.mantagen.org/wp/wp-json/wp/v2';
 var queryMapping = {
   category: 'filter[cat_name]',
   slug: 'filter[name]',
@@ -10435,7 +10435,7 @@ var keysMap = function keysMap(mapping) {
 
 // for now menu id to be input manually to save second request being made
 var menuId = 5;
-var menuUrl = exports.menuUrl = 'http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp-api-menus/v2/menus/' + menuId;
+var menuUrl = exports.menuUrl = 'http://livingmathematics.mantagen.org/wp/wp-json/wp-api-menus/v2/menus/' + menuId;
 
 var fetchUrlify = exports.fetchUrlify = function fetchUrlify(params) {
   var id = params.id,

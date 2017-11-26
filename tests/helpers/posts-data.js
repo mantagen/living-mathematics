@@ -25,14 +25,14 @@ export const generateWPPostObject = (data: Object): types.WPPost =>
     date: "2017-04-05T14:45:43",
     date_gmt: "2017-04-05T14:45:43",
     guid: {
-      rendered: "http://livingmathematics.techniqueandquo.uk/wp/?p=1"
+      rendered: "http://livingmathematics.mantagen.org/wp/?p=1"
     },
     modified: "2017-04-06T18:13:51",
     modified_gmt: "2017-04-06T18:13:51",
     slug: "hello-world",
     status: "publish",
     type: "post",
-    link: "http://livingmathematics.techniqueandquo.uk/wp/2017/04/05/hello-world/",
+    link: "http://livingmathematics.mantagen.org/wp/2017/04/05/hello-world/",
     title: {
       rendered: "Extravaganza meetup"
     },
@@ -59,45 +59,45 @@ export const generateWPPostObject = (data: Object): types.WPPost =>
     _links: {
       self: [
         {
-          href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/posts/1"
+          href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/posts/1"
         }
       ],
       collection: [
         {
-          href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/posts"
+          href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/posts"
         }
       ],
       about: [
         {
-          href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/types/post"
+          href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/types/post"
         }
       ],
       author: [
         {
           embeddable: true,
-          href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/users/1"
+          href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/users/1"
         }
       ],
       replies: [
         {
           embeddable: true,
-          href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/comments?post=1"
+          href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/comments?post=1"
         }
       ],
       "version-history": [{
-        href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/posts/1/revisions"
+        href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/posts/1/revisions"
       }],
       "wp:attachment": [{
-        href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/media?parent=1"
+        href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/media?parent=1"
       }],
       "wp:term": [{
       taxonomy: "category",
       embeddable: true,
-      href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/categories?post=1"
+      href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/categories?post=1"
       }, {
         taxonomy: "post_tag",
         embeddable: true,
-        href: "http://livingmathematics.techniqueandquo.uk/wp/wp-json/wp/v2/tags?post=1"
+        href: "http://livingmathematics.mantagen.org/wp/wp-json/wp/v2/tags?post=1"
       }],
       curies: [{
         name: "wp",

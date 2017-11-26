@@ -7,7 +7,7 @@
     "build": "webpack && babel src --out-dir lib --copy-files",
     "start": "node \"./lib/server/server.js\"",
     "dev": "npm run dev-build && babel-node \"./src/server/server.js\"",
-    "dev-build": "npm run lint && webpack",
+    "dev-build": "npm run lint && webpack --watch",
     "dev-start": "babel-node \"./src/server/server.js\"",
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "test": "jest --coverage",
